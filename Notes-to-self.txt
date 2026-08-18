@@ -1,0 +1,23 @@
+Notes to self:
+
+Quartus project workflow:
+
+Setting up the project:
+	- Create a new folder and set that to be the working directory of the project. A lot of files will be created during the process so ensure there is a folder for this project to contain all of these. 
+	- Create a top-level design entity name that is easy and remember it as it should be the name of the top_module in your verilog implementation.
+	- Set the device to be the Cyclone V FPGA (5CSEMA5F31C6)
+
+- File -> new -> Verilog HDL file. Save as and rename file - this can be whatever you want it to be. 
+
+- Once done, Ctrl + L will compile the design. Bottom left contains all the tasks that must be passed for successful compilation.
+
+- Assignments -> Assignment Editor. Choose the signal in "To", set Assignment Name to "Location", and use DE1-SoC manual to find pin assignments which go in the Value column.
+
+- Some important pin assignments - several clks on the board but one 50MHz clk is on PIN_AF14. LEDR[0] is PIN_V16. KEY[0] is PIN_AA14. 
+
+- Tools -> Programmer. Ensure board is on, and in Hardware setup DE1-SoC should show up. Also add a device ABOVE the FPGA in the chain. This Device should be the Soc Series V -> SOCVHPS. Our chain should then look like TDI -> SOCVHPS -> FPGA fabric -> TDO. This is the way the SoC is configured, so even if we are not configuring the HPS, we still need to have it in the chain.  
+
+
+When we first create a project in Quartus, it will ask for a name of the project then a name of the "top-level design entity". When we end up compiling the project, the compiler will search the files in the project for a module with that exact name. This will then be used as the root of the design hierarchy. Note that the verilog file names do not matter, only the module name defined within it. The importance of this top level module is usually to connect the major blocks of your design together, and often the physical FPGA pins will be connected to ports in this module. 
+
+ 
