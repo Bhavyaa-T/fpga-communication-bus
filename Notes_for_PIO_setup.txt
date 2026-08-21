@@ -1,0 +1,48 @@
+Notes for PIO setup and memory mapping
+
+--- Hierarchy art ---
+
+ARM / HPS
+    │
+    │ built-in lightweight bridge
+    ▼
+
+FPGA fabric
+┌──────────────────────────┐
+│ Computer_System          │  ← generated HDL
+│                          │
+│ interconnect             │
+│      ↓                   │
+│ PIO                      │
+└──────┬───────────────────┘
+       │ exported signal
+       ▼
+new_output_port
+       │
+       ▼
+your own RTL
+       │
+       ▼
+LEDs / custom bus / etc.
+
+-----------------------
+
+1. Find and open Quartus project file:
+	~/Downloads/PIO_loopback/verilog/DE1_SoC_Computer.qar
+
+2. Since .qar represents an archived project file, once clicked on, a destination folder is required. By default this is set to the project file, this is NOT correct. We need to thus change the location to the parent directory, ~/Downloads/PIO_loopback/verilog. 
+
+3. When we open the project there may be some warnings about updates to IP. This is because we are running Quartus 25.1 whereas the project was created in Quartus 18.1. So far, this has not caused any problems but be wary. 
+
+4. Upon changing to Files in the Project Navigator, we see 3 files. DE1_SoC_Computer.v contains the verilog code for the top level module. It is setup in an old verilog format where all signals are defined in the first set of brackets, and then defined as inputs or outputs within the module code.
+
+5 Within the top module, we instantiate the Computer_System module (The module who's verilog code is created by the Generate HDL button in Platform designer). In order to complete the connection, we must go into the generated verilog code and find out the name that the generate tool gave our output signal. The wires can then be connected in the module instantiation using .generated_signal_name(our_signal_name), where our_signal_name is what we call the wire in top module. 
+
+6. In the current example, our new signal is a 32 bit wire, called new_output_port. Note this is because it outputs FROM the PIO into the FPGA. Hence in the Computer_System module declaration, we have a line .led_pio_external_connection_export (new_output_port). 
+
+7. Also note the line assign LEDR = new_output_port[9:0]. Looking in assignment editor, we see that LEDR is assigned to the LED pins on our board. 
+
+8. Going back to thinking about how this PIO has been configured in platform designer, first click on the platform designer logo on the top, then select Computer_System.qsys. Here we can see that the PIO port we added is called led_pio, and observe the connections. The clk is connected to system clock, reset to both resets, and s1 to lightweight axi bus. BY double clicking to export the external_connection, we allow it to interface with peripherals on the FPGA (like the LEDS in this case). Another important feature to note is the Base and End addresses. THESE MUST NOT INTERFERE WITH ADDRESSES FOR ANY OTHER PIO PORTS ON THE SAME AXI BUS. Hence here, we have chosen to set the Base address as 0x20, and automatically, platform designer will set the end to be 0x2f. THIS BASE ADDRESS IS VERY IMPORTANT WHEN WE GET TO MEMORY MAPPING IN OUR C CODE. 
+
+--- IMPORTANT: Note that the generate HDL uses "make". If not installed this will raise many errors ---
+
