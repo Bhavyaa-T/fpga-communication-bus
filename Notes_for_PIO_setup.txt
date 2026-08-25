@@ -46,3 +46,36 @@ LEDs / custom bus / etc.
 
 --- IMPORTANT: Note that the generate HDL uses "make". If not installed this will raise many errors ---
 
+Editing the C file:
+
+1. Using touch, we can create a C file in the home directory for linux on the ARM processor. This can then be edited using nano. 
+
+General structure of C code: 
+
+1. Know and accept that there are memory addresses for the AXI bus and the LW bus that are set in stone. 
+	These are : 
+		0xC0000_0000 <- AXI BUS BASE ADDRESS
+		0xff20_0000 <- LW BUS BASE ADDRESS
+	
+	They also have a fixed span :
+		0x0000_1000 <- AXI BUS SPAN
+		0x0000_1000 <- LW BUS SPAN
+
+2. You now go into platform designer and note the offsets for each of the PIO ports. In our case we have chosen a PIO port on the LW bus with an offset of 0x20.
+	0x0000_0020 <- PIO OFFSET
+
+3. Since the HPS will write to this port, we need to define a write pointer that will point at this memory address. Since linux applications cannot directly access physical addresses, we use a memory map. Getting the virtual address for this place involves 2 steps:
+	1. fd = open( "/dev/mem", ( O_RDWR | O_SYNC)) <- /dev/mem is a device file representing the computer's physical address space. O_RDWR and O_SYNC are 2 flags requesting synchronised access, and reading and writing permission.
+	
+	2. lw_virtual_base_address = mmap(NULL, LW BUS SPAN, PROT_READ | PROT_WRITE, MAP_SHARED, fd, LW BUS BASE) <- Choose the virtual address, map 0x1000 bytes, allow read/write, allow writes to alter underlying physical mapping,
+	use /dev/mem, start at LW BUS BASE. 
+	
+	
+4. From here, setting the pointer is straightforward. 	
+	voltatile unsigned int * lw_pio_write_ptr = NULL <- defining the pointer
+	lw_pio_write_ptr = (unsigned int *)(lw_virtual_base_address + PIO OFFSET) <- setting the pointer to the base address + offset. (i.e at the location set in platform designer)
+	
+5. Now we can write to the FPGA simply by writing to this virtual address
+	*(lw_pio_write_ptr) = some number;
+
+6. Lines 6 and 7 from before describe the verilog side of this. 
