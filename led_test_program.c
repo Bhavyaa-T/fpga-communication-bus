@@ -3,7 +3,7 @@
 #include <string.h>
 #include <fcntl.h> // defines requests and arguments for open()
 #include <sys/mman.h> // defines requests and arguments for mmap()
-#include <unistd.h> // defines requests and arguments for close()
+#include <unistd.h> // defines requests and arguments for close() and usleep()
 
 // lw axi bus physical address and span
 #define FPGA_LW_BUS_BASE 0xff200000
@@ -43,10 +43,9 @@ int main(void)
 
     led_pio_write_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_LED_WRITE_OFFSET); //ensures correct offset since sizeof(char) is one byte
 
-    while(1)
-    {
-        int num = 4;
-        *(led_pio_write_ptr) = num;
+    for (int i = 0; i < 256; i++) {
+        *(led_pio_write_ptr) = i;
+        usleep(500000);
     }
 
 }
