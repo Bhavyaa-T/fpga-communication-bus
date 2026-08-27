@@ -1,0 +1,117 @@
+Setting up SSH between your desktop and the SoC
+
+- the 2 things we need are for the board to have an IPv4 address on our local Ethernet network, and an ssh server installed
+
+- IPv4 and IPv6 are two systems for giving devices network addresses. IPv4 looks like 192.168.1.100 and IPv6 looks like fe80::1034:56ff:fe78:9012/64. IPv4 uses 32 bits, IPv6 uses 128 bits. For our direct PC-to-board Ethernet setup, IPv4 is easier. It is likely that the board will not have an IPv4 address already established, so we will need to configure this.
+
+1. Configure the Rocky Linux PC
+-------------------------------
+
+Run nmtui in the terminal 
+
+Select Edit a connection and choose the ethernet connection option. There should only be one. 
+
+Now we need to give our PC an IPv4 address. Change the configuration from automatic to manual and then select an unused address between 192.168.0.0 and 129.168.0.255 excluding 192.168.0.123 as this is the address we will assign to the board. 
+
+A convenient arbitrary choice is 192.168.0.111/24, where the /24 assigns the subnet mask (setting the first 3 numbers to identify the local network and leaving the 4th to identify the device)
+
+Next tick the box saying automatically connect. 
+
+
+2. Temporarily configure the board
+----------------------------------
+
+From the board’s USB-UART console, run:
+
+ifconfig eth0 192.168.0.123 netmask 255.255.255.0 up	// This sets the IPv4 address for the board
+
+From the PC, test the connection:
+
+ping 192.168.0.123
+
+
+3. Install the SSH server
+-------------------------
+
+The board already had openssh-client version 5.9p1-5ubuntu1, but
+openssh-server was not installed.
+
+On the Rocky Linux PC, run:
+
+cd ~/Downloads
+
+curl -O https://old-releases.ubuntu.com/ubuntu/pool/main/o/openssh/openssh-server_5.9p1-5ubuntu1_armhf.deb
+
+sudo firewall-cmd --add-port=8000/tcp
+
+python3 -m http.server 8000 --bind 192.168.0.111
+
+Leave this terminal running.
+
+On the board, run:
+
+cd /tmp
+
+wget http://192.168.0.111:8000/openssh-server_5.9p1-5ubuntu1_armhf.deb
+
+dpkg -i openssh-server_5.9p1-5ubuntu1_armhf.deb
+
+service ssh start
+
+Once installation is complete, stop the HTTP server on the PC by
+pressing Ctrl+C.
+
+Then close the temporary firewall port:
+
+sudo firewall-cmd --remove-port=8000/tcp
+
+
+4. Make the board’s IPv4 address permanent
+------------------------------------------
+
+On the board, back up the existing configuration:
+
+cp /etc/network/interfaces /etc/network/interfaces.backup
+
+Edit the network configuration:
+
+vi /etc/network/interfaces
+
+Set its contents to:
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+    address 192.168.0.123
+    netmask 255.255.255.0
+
+In vi:
+
+- Press i to enter insert mode.
+- Press Esc when finished editing.
+- Type :wq and press Enter to save and quit.
+- Use :q! to quit without saving.
+
+Reboot the board:
+
+reboot
+
+
+5. Connect to the board using SSH
+---------------------------------
+
+From the Rocky Linux PC:
+
+ssh root@192.168.0.123
+
+To leave the SSH connection:
+
+exit
+
+After rebooting, verify that the setup is persistent:
+
+ping 192.168.0.123
+
+ssh root@192.168.0.123
