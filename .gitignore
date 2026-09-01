@@ -1,0 +1,27 @@
+# Quartus compilation databases
+db/
+incremental_db/
+
+# Quartus outputs
+output_files/
+
+# Generated Platform Designer output
+platform_designer_module/
+
+# Generated HPS handoff files
+hps_isw_handoff/
+
+# Generated Platform Designer metadata
+*.sopcinfo
+
+# Automatic backups
+*.bak
+
+# Generated reports / summaries
+*.rpt
+*.summary
+*.smsg
+
+# Other generated files visible in this project
+c5_pin_model_dump.txt
+hps_sdram_p0_summary.csv
