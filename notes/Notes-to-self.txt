@@ -15,9 +15,10 @@ Setting up the project:
 
 - Some important pin assignments - several clks on the board but one 50MHz clk is on PIN_AF14. LEDR[0] is PIN_V16. KEY[0] is PIN_AA14. 
 
-- Tools -> Programmer. Ensure board is on, and in Hardware setup DE1-SoC should show up. Also add a device ABOVE the FPGA in the chain. This Device should be the Soc Series V -> SOCVHPS. Our chain should then look like TDI -> SOCVHPS -> FPGA fabric -> TDO. This is the way the SoC is configured, so even if we are not configuring the HPS, we still need to have it in the chain.  
+- Tools -> Programmer. Ensure board is on, and in Hardware setup DE1-SoC should show up. If not, you may have to click the dropdown menu at hardware setup -> Currently selected hardware and select the DE1-SoC  
 
+- Also add a device ABOVE the FPGA in the chain. This Device should be the Soc Series V -> SOCVHPS. Our chain should then look like TDI -> SOCVHPS -> FPGA fabric -> TDO. This is the way the SoC is configured, so even if we are not configuring the HPS, we still need to have it in the chain.  
 
 When we first create a project in Quartus, it will ask for a name of the project then a name of the "top-level design entity". When we end up compiling the project, the compiler will search the files in the project for a module with that exact name. This will then be used as the root of the design hierarchy. Note that the verilog file names do not matter, only the module name defined within it. The importance of this top level module is usually to connect the major blocks of your design together, and often the physical FPGA pins will be connected to ports in this module. 
 
- 
+ IMPORTANT - remember to always check the file that is going to program the FPGA!! In quartus programmer, we will have 

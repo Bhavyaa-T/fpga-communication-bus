@@ -7,7 +7,7 @@
    <irq preferredWidth="47" />
   </columns>
  </systemtable>
- <library expandedCategories="Project,Library" />
- <window width="1920" height="1011" x="208" y="163" />
- <generation block_symbol_file="0" />
+ <library expandedCategories="Library,Project" />
+ <window width="2560" height="1371" x="0" y="69" />
+ <generation block_symbol_file="0" path="" />
 </preferences>

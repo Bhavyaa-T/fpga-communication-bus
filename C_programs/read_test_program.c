@@ -1,7 +1,3 @@
-// This program will use the same PIO as led_test but will be using the lw bus to instead send commands
-// to a state machine that is implemented in RTL
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,12 +13,12 @@
 void *virtual_lw_base_ptr;
 
 
-// write pointer to virtual memory address of led pio (set up in platform designer)
-// volatile ensures intermediate writes are not optimised away by the compiler
-volatile unsigned int* led_pio_write_ptr = NULL;
+// read pointer to virtual memory address of led pio (set up in platform designer)
+// volatile ensures intermediate reads are not optimised away by the compiler
+volatile unsigned int* led_pio_read_ptr = NULL;
 
 // lw bus offset for led pio
-#define FPGA_LED_WRITE_OFFSET 0x00
+#define FPGA_LED_READ_OFFSET 0x00
 
 // /dev/mem file id
 int fd;
@@ -45,17 +41,16 @@ int main(void)
         return 1;
     }
 
-    led_pio_write_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_LED_WRITE_OFFSET); //ensures correct offset since sizeof(char) is one byte
+    led_pio_read_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_LED_READ_OFFSET); //ensures correct offset since sizeof(char) is one byte
 
     while (1) {
 
-        int command, junk;
-        printf("Command: ");
-
-        junk = scanf("%d", &command);
-
-        *(led_pio_write_ptr) = command;
-        printf("\n");
+        int command;
+        printf("Command :");
+        scanf("%d", &command);
+        
+        *(led_pio_read_ptr) = command;
+        printf("%i\n", *(led_pio_read_ptr));
 
     }
 }

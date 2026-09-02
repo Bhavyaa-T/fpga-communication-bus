@@ -1,0 +1,13 @@
+Platform designer is an application that can be accessed from quartus prime. 
+
+Main things to note:
+
+- IP on LHS, select IP as required, modify parameters and make connections 
+
+- Generate HDL, noting that it will create a folder with the name you chose for this module 
+
+- If re-generating, select the parent directory of the already created module_name folder, such that it overwrites the previous HDL generated
+
+- An instance of the module with all ports defined can be found in module_name called module_name_inst 
+
+- copy this code into your top level module to use it 
