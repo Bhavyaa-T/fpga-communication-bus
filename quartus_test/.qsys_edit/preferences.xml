@@ -8,7 +8,7 @@
   </columns>
  </systemtable>
  <library
-   expandedCategories="Project,Library/Interface Protocols/Serial,Library/Interface Protocols,Library/University Program,Library/University Program/Communications,Library" />
+   expandedCategories="Library/Interface Protocols,Project,Library,Library/University Program/Communications,Library/Interface Protocols/Serial,Library/University Program" />
  <window width="1280" height="1371" x="1280" y="69" />
  <generation block_symbol_file="0" path="" />
 </preferences>
