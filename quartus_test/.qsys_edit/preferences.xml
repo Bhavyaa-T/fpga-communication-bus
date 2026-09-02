@@ -7,7 +7,8 @@
    <irq preferredWidth="47" />
   </columns>
  </systemtable>
- <library expandedCategories="Library,Project" />
- <window width="2560" height="1371" x="0" y="69" />
+ <library
+   expandedCategories="Project,Library/Interface Protocols/Serial,Library/Interface Protocols,Library/University Program,Library/University Program/Communications,Library" />
+ <window width="1280" height="1371" x="1280" y="69" />
  <generation block_symbol_file="0" path="" />
 </preferences>

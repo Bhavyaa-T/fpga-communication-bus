@@ -161,7 +161,7 @@ module quartus_test (
 );
 
 
-	platform_designer_module instance1 (
+	platform_designer_module system_instance (
 		
 		///// HPS SIDE /////
 		
@@ -269,9 +269,19 @@ module quartus_test (
 		.system_pll_ref_reset_reset         (1'b0),         //        system_pll_ref_reset.reset
 		
 		.led_pio_external_connection_in_port  (SW),  // led_pio_external_connection.in_port
-		.led_pio_external_connection_out_port (LEDR) //                            .out_port
+		.led_pio_external_connection_out_port (LEDR), //                            .out_port
+		
+		.segment_pio_external_connection_in_port  (SW),  // segment_pio_external_connection.in_port
+		.segment_pio_external_connection_out_port (segment_out)  //                                .out_port
 	);
 	
+	logic [3:0] segment_out;	// truncating 10 bit pio to 4 bits
+	
+	
+	HexDigit decoder_instance (
+		.num(segment_out),
+		.segs(HEX0)
+	);
 
 
 endmodule 

@@ -11,3 +11,16 @@ Main things to note:
 - An instance of the module with all ports defined can be found in module_name called module_name_inst 
 
 - copy this code into your top level module to use it 
+
+PIOs:
+
+- PIOs can be configured as bidirectional, input, output, or inout. 
+
+- first thing to understand is the addressing. Upon importing a PIO we see that a base and end address is set. 
+
+- For the C programming part, only the base address is really relevant, as it gives us our offset from the relevant axi bus base address
+
+- However, for reference, note that it is 16 bytes wide (0x0 - 0xf), as by default there are 4 registers, each taking 4 bytes of address space: data, direction, interruptmask, edgecapture.
+
+- data sits from 0x0 - 0x4, direction from 0x4 to 0x8, interruptmask from 0x8 to 0xC, edgecapture from 0xC to 0xf
+
