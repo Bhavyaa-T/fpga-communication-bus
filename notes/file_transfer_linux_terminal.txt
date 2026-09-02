@@ -6,4 +6,5 @@ Copy path to directory:
 	- pwd 
 	- /home/root/led_test
 // linux terminal on desktop	
-Navigate to where c file is saved locally and open ssh server using
+Navigate to where c file is saved locally and use the command 
+scp program.c root@192.168.0.123:/home/root/

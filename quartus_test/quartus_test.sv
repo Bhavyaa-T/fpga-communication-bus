@@ -268,30 +268,10 @@ module quartus_test (
 		.system_pll_ref_clk_clk             (CLOCK_50),             //          system_pll_ref_clk.clk
 		.system_pll_ref_reset_reset         (1'b0),         //        system_pll_ref_reset.reset
 		
-		.led_pio_external_connection_export (pio_output)  // led_pio_external_connection.export
+		.led_pio_external_connection_in_port  (SW),  // led_pio_external_connection.in_port
+		.led_pio_external_connection_out_port (LEDR) //                            .out_port
 	);
 	
-	logic [9:0] pio_output;
-	logic [25:0] counter = 26'b0;
-	
-	always_ff @(posedge CLOCK_50) begin
-		if (pio_output == 10'b0) begin
-			LEDR <= 10'b0;
-			counter <= 26'b0;
-		end
-		else if (pio_output == 10'b1) begin
-			if (counter == 26'b0) begin
-				LEDR <= LEDR + 1;
-			end
-			counter <= counter + 1;
-		end
-		else if (pio_output == 10'd2) begin
-			if (counter == 26'b0) begin
-				LEDR <= LEDR - 1;
-			end
-			counter <= counter + 1;
-		end
-	end
 
 
 endmodule 
