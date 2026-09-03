@@ -274,11 +274,14 @@ module quartus_test (
 		.segment_pio_external_connection_in_port  (SW),  // segment_pio_external_connection.in_port
 		.segment_pio_external_connection_out_port (segment_out),  //  .out_port
 		
-		.uart_0_external_connection_rxd           (loopback),           //      uart_0_external_connection.rxd
-		.uart_0_external_connection_txd           (loopback)            //                                .txd
+		.uart_0_external_connection_rxd           (send_1_to_0),           //      uart_0_external_connection.rxd
+		.uart_0_external_connection_txd           (send_0_to_1),            //                                .txd
+		.uart_1_external_connection_rxd           (send_0_to_1),           //      uart_0_external_connection.rxd
+		.uart_1_external_connection_txd           (send_1_to_0)            //                                .txd
 	);
 	
-	logic loopback;
+	logic send_0_to_1;
+	logic send_1_to_0;
 	
 	logic [3:0] segment_out;	// truncating 10 bit pio to 4 bits
 	

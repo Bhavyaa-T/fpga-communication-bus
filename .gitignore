@@ -25,6 +25,9 @@ hps_isw_handoff/
 # Quartus workspace file - stores IDE state
 *.qws
 
+# qsys IDE state
+quartus_test/.qsys_edit/
+
 # Other generated files visible in this project
 c5_pin_model_dump.txt
 hps_sdram_p0_summary.csv
