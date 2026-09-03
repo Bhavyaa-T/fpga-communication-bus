@@ -1,0 +1,61 @@
+terminal 0
+root@de1soclinux:~/UART# ./UART_0
+STATUS = 0x0060                 // 1. BOTH start with status flags transmit empty and transmit ready high
+Character :g                    // 2. send character g
+STATUS = 0x0040                 // 3. transmit empty status flag drops 
+Received: h                     
+STATUS = 0x0060                 
+Character :p                    // 7. send character p
+STATUS = 0x0040
+Received: g
+STATUS = 0x0060
+Character :l
+STATUS = 0x0040
+Received: l                     // 10. only first character is recieved
+STATUS = 0x0060
+Character :h
+STATUS = 0x0040
+Received: o                     // 12. 'o' is instantly recieved since clogged up on UART_1 side
+STATUS = 0x0060
+Character :h
+STATUS = 0x0040
+Received: l
+STATUS = 0x0060
+Character :i
+STATUS = 0x0040
+Received: g
+STATUS = 0x0060
+Character :h
+STATUS = 0x0040
+Received: i
+STATUS = 0x0060
+
+terminal 1
+root@de1soclinux:~/UART# ./UART_1
+STATUS = 0x0060
+STATUS = 0x00e0                 // 4. after g is sent from UART_0, RRDY goes high - rx reg ready to be read
+Received: g                     
+Character :h                    // 5. send character h
+STATUS = 0x0040                 // 6. loops back and prints status instantly - transmit empty flag has dropped
+STATUS = 0x00e0                 // 8. intermediate status of 0x0060 is not printed - this is repeat of before
+Received: p
+Character :g
+STATUS = 0x0040
+STATUS = 0x00e0
+Received: l
+Character :lol                  // 9. send 'l', 'o', 'l' all at once - these clog up the next 2 sends
+STATUS = 0x0040
+STATUS = 0x00e0
+Received: h
+Character :STATUS = 0x0040      // 11. clogged up send
+STATUS = 0x00e0
+Received: h
+Character :STATUS = 0x0040      // 13. clogged up send
+STATUS = 0x00e0
+Received: i
+Character :g
+STATUS = 0x0040
+STATUS = 0x00e0
+Received: h
+Character :i
+STATUS = 0x0040
