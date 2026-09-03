@@ -13,31 +13,6 @@
 // pointer to virtual memory address of lw axi bus base. type void* to match return type of mmap()
 void *virtual_lw_base_ptr;
 
-
-/////      PIOS       /////
-
-// rdwr pointer to virtual memory address of led pio (set up in platform designer)
-// volatile ensures intermediate reads/writes are not optimised away by the compiler
-volatile unsigned int* led_pio_rd_wr_ptr = NULL;
-
-// rdwr pointer to virtual memory address of seg pio
-volatile unsigned int* seg_pio_rd_wr_ptr = NULL;
-
-/////      UART       /////
-
-// rd pointer to virtual memory address of RX register
-volatile unsigned int* uart_rx_rd_ptr = NULL;
-
-// wr pointer to virtual memory address of TX register
-volatile unsigned int* uart_tx_wr_ptr = NULL;
-
-// rd pointer to virtual memory address of status register
-volatile unsigned int* uart_status_rd_ptr = NULL;
-
-// wr pointer to virtual memory address of control register
-volatile unsigned int* uart_control_wr_ptr = NULL;
-
-
 // lw bus offset for led pio
 #define FPGA_LED_RD_WR_OFFSET 0x00
 
@@ -70,17 +45,33 @@ int main(void)
         close(fd);
         return 1;
     }
+
+    /////      PIOS       /////
+
+    // rdwr pointer to virtual memory address of led pio (set up in platform designer)
+    // volatile ensures intermediate reads/writes are not optimised away by the compiler
+    // 32 bits since the data register of PIO is 4 bytes wide 
+
+    volatile uint32_t* const led_pio_rd_wr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_LED_RD_WR_OFFSET); 
+
+    // rdwr pointer to virtual memory address of seg pio
+    volatile uint32_t* const seg_pio_rd_wr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_SEG_RD_WR_OFFSET);
+
+    /////      UART       /////
+    // 32 bits since each register is 4 bytes wide
+
+    // rd pointer to virtual memory address of RX register
+    volatile const uint32_t* const uart_rx_rd_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_RX_OFFSET);
+
+    // wr pointer to virtual memory address of TX register
+    volatile uint32_t* const uart_tx_wr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_TX_OFFSET);
+
+    // rd pointer to virtual memory address of status register
+    volatile const uint32_t* const uart_status_rd_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_STATUS_OFFSET);
+
+    // wr pointer to virtual memory address of control register
+    volatile uint32_t* const uart_control_wr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_CONTROL_OFFSET);
     
-    //ensures correct offset since sizeof(char) is one byte
-    led_pio_rd_wr_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_LED_RD_WR_OFFSET); 
-    seg_pio_rd_wr_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_SEG_RD_WR_OFFSET);
-
-    // UART
-    uart_rx_rd_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_UART_RX_OFFSET);
-    uart_tx_wr_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_UART_TX_OFFSET);
-    uart_status_rd_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_UART_STATUS_OFFSET);
-    uart_control_wr_ptr = (unsigned int *)((char *)virtual_lw_base_ptr + FPGA_UART_CONTROL_OFFSET);
-
 
     // enable interrupts in control register
     // uart_control_wr_ptr & (1 << 6) = 1;
