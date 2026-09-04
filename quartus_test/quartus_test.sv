@@ -274,10 +274,17 @@ module quartus_test (
 		.segment_pio_external_connection_in_port  (SW),  // segment_pio_external_connection.in_port
 		.segment_pio_external_connection_out_port (segment_out),  //  .out_port
 		
-		.uart_0_external_connection_rxd           (send_1_to_0),           //      uart_0_external_connection.rxd
-		.uart_0_external_connection_txd           (send_0_to_1),            //                                .txd
-		.uart_1_external_connection_rxd           (send_0_to_1),           //      uart_0_external_connection.rxd
-		.uart_1_external_connection_txd           (send_1_to_0)            //                                .txd
+		
+		.uart_0_external_connection_rxd           (),           //      uart_0_external_connection.rxd
+		.uart_0_external_connection_txd           (),            //                                .txd
+		.uart_1_external_connection_rxd           (),           //      uart_1_external_connection.rxd
+		.uart_1_external_connection_txd           (),          //                                .txd
+		
+		// lw UART (with FIFO)
+		.intel_lw_uart_0_external_connection_rxd  (send_1_to_0),  // intel_lw_uart_0_external_connection.rxd
+		.intel_lw_uart_0_external_connection_txd  (send_0_to_1),  //                                    .txd
+		.intel_lw_uart_1_external_connection_rxd  (send_0_to_1),  // intel_lw_uart_1_external_connection.rxd
+		.intel_lw_uart_1_external_connection_txd  (send_1_to_0)   //                                    .txd
 	);
 	
 	logic send_0_to_1;
