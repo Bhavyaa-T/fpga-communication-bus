@@ -85,7 +85,7 @@ int main(void)
         while (!(*uart_status_rdwr_ptr & (1 << 7))) {
             // wait
         }
-        
+
         printf("Received: ");
 
         while (*uart_status_rdwr_ptr & (1 << 7)) {

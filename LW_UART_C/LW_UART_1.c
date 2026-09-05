@@ -67,12 +67,13 @@ int main(void)
         while (!(*uart_status_rdwr_ptr & (1 << 7))) {
             // wait
         }
-        
+
         printf("Received: ");
 
         while (*uart_status_rdwr_ptr & (1 << 7)) {
             printf("%c", (char)*(uart_rx_rd_ptr));
         }
+
         printf("\n");
         printf("STATUS = 0x%04x\n", *uart_status_rdwr_ptr);
 
@@ -81,7 +82,6 @@ int main(void)
         while (!(*(uart_status_rdwr_ptr) & (1 << 6))) {
             // wait
         }
-
 
         char message[100];
         printf("Character :");
