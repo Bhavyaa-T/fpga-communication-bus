@@ -64,24 +64,34 @@ int main(void)
         printf("STATUS = 0x%04x\n", *uart_status_rdwr_ptr);
 
         // poll the transmit ready status bit, waiting until TRDY
-        while (!(*(uart_status_rdwr_ptr) & (1 << 6))) {
+        while (!(*uart_status_rdwr_ptr & (1 << 6))) {
             // wait
         }
 
-        char character;
+        char message[100];
         printf("Character :");
-        scanf(" %c", &character);
+        scanf(" %s", message);
 
-        *(uart_tx_wr_ptr) = character;
+        for (int i = 0; message[i] != '\0'; i++) {
+            while (!(*uart_status_rdwr_ptr & (1 << 6))) {
+            // wait
+            }
+            *(uart_tx_wr_ptr) = message[i];
+        }
 
         printf("STATUS = 0x%04x\n", *uart_status_rdwr_ptr);
 
         // poll the read ready status bit, waiting until RRDY
-        while (!(*(uart_status_rdwr_ptr) & (1 << 7))) {
+        while (!(*uart_status_rdwr_ptr & (1 << 7))) {
             // wait
         }
+        
+        printf("Received: ");
 
-        printf("Received: %c\n", (char)*(uart_rx_rd_ptr));
+        while (*uart_status_rdwr_ptr & (1 << 7)) {
+            printf("%c", (char)*(uart_rx_rd_ptr));
+        }
+        printf("\n");
 
     }
 }
