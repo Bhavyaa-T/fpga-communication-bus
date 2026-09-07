@@ -1,0 +1,67 @@
+For SSH using a DHCP server, we can no longer use a static ip address. 
+
+On the board, back up the existing configuration:
+
+cp /etc/network/interfaces /etc/network/interfaces.backup
+
+Edit the network configuration:
+
+nano /etc/network/interfaces
+
+Set its contents to:
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp 
+
+This means that now the board is a dhcp client and will be assigned an ip address by the server. 
+
+for this to work, we also have to change the MAC address by configuring ethaddr during U-boot:
+
+- setenv ethaddr <MAC ADDRESS> // use a MAC address from the list below
+- saveenv 
+
+
+// MAC ADDRESSES 
+1a:b5:81:a9:77:01
+1a:b5:81:a9:77:02
+1a:b5:81:a9:77:03
+1a:b5:81:a9:77:04
+1a:b5:81:a9:77:05
+1a:b5:81:a9:77:06
+1a:b5:81:a9:77:07
+1a:b5:81:a9:77:08
+1a:b5:81:a9:77:09
+1a:b5:81:a9:77:10
+1a:b5:81:a9:77:11
+1a:b5:81:a9:77:12
+1a:b5:81:a9:77:13
+1a:b5:81:a9:77:14
+1a:b5:81:a9:77:15
+1a:b5:81:a9:77:16
+
+These will map onto 16 IP addresses/hostnames as this fits neatly within an
+ACL definition that I'll create for access between VLANs. The hostnames are as
+follows:
+eietl-fpga-01.eng.cam.ac.uk
+eietl-fpga-02.eng.cam.ac.uk
+eietl-fpga-03.eng.cam.ac.uk
+eietl-fpga-04.eng.cam.ac.uk
+eietl-fpga-05.eng.cam.ac.uk
+eietl-fpga-06.eng.cam.ac.uk
+eietl-fpga-07.eng.cam.ac.uk
+eietl-fpga-08.eng.cam.ac.uk
+eietl-fpga-09.eng.cam.ac.uk
+eietl-fpga-10.eng.cam.ac.uk
+eietl-fpga-11.eng.cam.ac.uk
+eietl-fpga-12.eng.cam.ac.uk
+eietl-fpga-13.eng.cam.ac.uk
+eietl-fpga-14.eng.cam.ac.uk
+eietl-fpga-15.eng.cam.ac.uk
+eietl-fpga-16.eng.cam.ac.uk
+
+Hence, once all of the above has been setup, we can SSH into the board via the desktop using 
+
+ssh root@eietl-fpga-01.eng.cam.ac.uk 
