@@ -1,0 +1,28 @@
+Desktop Ethernet set to static IP:
+192.168.0.111/24                    // can do this in nmtui
+
+
+Board /etc/network/interfaces set to:
+iface eth0 inet dhcp
+
+Check dnsmasq is installed on desktop.
+
+Added /etc/dnsmasq.d/de1soc.conf:
+
+interface=enp4s0
+bind-dynamic
+dhcp-range=192.168.0.10,192.168.0.20,255.255.255.0,24h
+dhcp-host=1a:b5:81:a9:77:01,de1soc,192.168.0.123
+
+Enabled dnsmasq:
+
+sudo systemctl enable --now dnsmasq
+
+Rocky Linux firewall was blocking DHCP, so allowed the DHCP service:
+
+sudo firewall-cmd --zone=public --add-service=dhcp --permanent
+sudo firewall-cmd --reload
+
+Once finished using: (not strictly necessary)
+
+sudo systemctl stop dnsmasq
