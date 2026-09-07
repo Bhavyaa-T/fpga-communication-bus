@@ -1,0 +1,19 @@
+STATUS = 0x0060
+Character :hello
+STATUS = 0x0040
+Received: by
+STATUS = 0x0060
+Character :hello
+STATUS = 0x00c0
+Received: e
+STATUS = 0x0060
+Character :
+
+STATUS = 0x0060
+Received: hello
+STATUS = 0x0060
+Character :bye
+STATUS = 0x0040
+Received: h
+STATUS = 0x0060
+Character :^C
