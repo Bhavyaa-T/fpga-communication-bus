@@ -70,8 +70,19 @@ int main(void)
 
         printf("Received: ");
 
-        while (*uart_status_rdwr_ptr & (1 << 7)) {
-            printf("%c", (char)*(uart_rx_rd_ptr));
+        while (1) {
+
+        while (!(*uart_status_rdwr_ptr & (1 << 7))) {
+            // wait
+        }
+
+        char letter = (char)*(uart_rx_rd_ptr);
+
+        if (letter == '\n') {
+            break;
+        }
+        printf("%c", letter);
+
         }
 
         printf("\n");
@@ -84,7 +95,7 @@ int main(void)
         }
 
         char message[100];
-        printf("Character :");
+        printf("Message: ");
         scanf(" %s", message);
 
         for (int i = 0; message[i] != '\0'; i++) {
@@ -94,6 +105,10 @@ int main(void)
             *(uart_tx_wr_ptr) = message[i];
         }
 
+        while (!(*uart_status_rdwr_ptr & (1 << 6))) {
+            // wait
+        }
+        *uart_tx_wr_ptr = '\n';
 
     }
 }
