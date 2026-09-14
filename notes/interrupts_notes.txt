@@ -1,0 +1,5 @@
+In normal C programs, the use of "static" is not important unless you have multiple C files in your project. This is because static's main role is to ensure that the function is kept private and can only be used within that specific C file. If we have a project that will compile to form multiple object files, we want to ensure the linker can operate correctly, and thus for functions which do need to be transferred over keep them global, otherwise private (using keyword static).
+
+The reason we need to use it so much in linux KERNEL programs, is because the kernel is huge with lots of object files, and so using static avoids name collisions and ensures the linker works properly.
+
+Rather than using /dev/mmap, this time we are working in the kernel space and so we actually just use kernel functions which are defined in <linux/name.h>.
