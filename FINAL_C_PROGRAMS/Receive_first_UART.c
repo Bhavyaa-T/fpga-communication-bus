@@ -43,16 +43,16 @@ int main(void)
     // 32 bits since each register is 4 bytes wide
 
     // rd pointer to virtual memory address of RX register
-    volatile const uint32_t* const uart_rx_rd_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_RX_OFFSET);
+    volatile const uint32_t* const uart_rx_rd_ptr = (uint32_t *)((uint8_t *)virtual_lw_base_ptr + FPGA_UART_RX_OFFSET);
 
     // wr pointer to virtual memory address of TX register
-    volatile uint32_t* const uart_tx_wr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_TX_OFFSET);
+    volatile uint32_t* const uart_tx_wr_ptr = (uint32_t *)((uint8_t *)virtual_lw_base_ptr + FPGA_UART_TX_OFFSET);
 
     // rdwr pointer to virtual memory address of status register
-    volatile uint32_t* const uart_status_rdwr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_STATUS_OFFSET);
+    volatile uint32_t* const uart_status_rdwr_ptr = (uint32_t *)((uint8_t *)virtual_lw_base_ptr + FPGA_UART_STATUS_OFFSET);
 
     // wr pointer to virtual memory address of control register
-    volatile uint32_t* const uart_control_wr_ptr = (uint32_t *)((char *)virtual_lw_base_ptr + FPGA_UART_CONTROL_OFFSET);
+    volatile uint32_t* const uart_control_wr_ptr = (uint32_t *)((uint8_t *)virtual_lw_base_ptr + FPGA_UART_CONTROL_OFFSET);
 
     while (1) {
 
