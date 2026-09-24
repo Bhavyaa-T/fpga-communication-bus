@@ -17,7 +17,7 @@ void *virtual_lw_base_ptr;
 #define FPGA_UART_RX_OFFSET 0x40
 #define FPGA_UART_TX_OFFSET 0x44
 #define FPGA_UART_STATUS_OFFSET 0x48
-#define FPGA_UART_CONTROL_OFFSET 0x5c
+#define FPGA_UART_CONTROL_OFFSET 0x4c
 
 // /dev/mem file id
 int fd;
